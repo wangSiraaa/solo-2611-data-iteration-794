@@ -1,0 +1,12 @@
+{"op": "register_power"}
+{"op": "register_sites"}
+{"op": "compute_site_results"}
+{"op": "register_experiments"}
+{"op": "publish_report", "report_id": "R1", "experiment_id": "EXP1"}
+{"op": "publish_report", "report_id": "R2", "experiment_id": "EXP2"}
+{"op": "correct_power", "trace_id": "A", "correction": {"revision": "a2", "replace_segment": {"segment_id": "A1", "start": 1, "end": 2, "power": 6}}}
+{"op": "compute_site_results", "sites": ["A"]}
+{"op": "publish_report", "report_id": "R3", "experiment_id": "EXP1"}
+{"op": "read_report", "report_id": "R1"}
+{"op": "verify_report", "report_id": "R1"}
+{"op": "verify_report", "report_id": "R3"}

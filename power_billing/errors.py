@@ -31,5 +31,9 @@ class ConflictError(PowerBillingError):
     """An idempotency, version, predecessor, or concurrency check failed."""
 
 
+class ExperimentError(ValidationError):
+    """A site/experiment registration or a report is malformed or inconsistent."""
+
+
 class NotFoundError(PowerBillingError):
     """A referenced object does not exist."""

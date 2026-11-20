@@ -29,10 +29,17 @@ class PowerRevision:
 
 
 class TrajectoryStore:
-    """A mutable registry of revisioned trajectories (in memory, by design)."""
+    """A mutable registry of revisioned trajectories (in memory, by design).
+
+    The store keeps the full per-tracerevision history: superseded revisions
+    remain readable via :meth:`revision` / :meth:`trajectory_at` so that
+    previously published results (which bind a trace *and* a revision) can be
+    audited and recomputed against the exact version they used.
+    """
 
     def __init__(self) -> None:
         self._revs: dict[str, PowerRevision] = {}
+        self._history: dict[tuple[str, str], PowerRevision] = {}
 
     # -- loading ---------------------------------------------------------- #
     def register(self, trace_id: str, revision: str, segments: Iterable[Segment]) -> PowerRevision:
@@ -41,6 +48,7 @@ class TrajectoryStore:
             raise RevisionError(f"trace {trace_id!r} is already registered")
         rev = PowerRevision(trace_id, revision, tuple(ordered))
         self._revs[trace_id] = rev
+        self._history[(trace_id, revision)] = rev
         return rev
 
     def register_json(self, obj: dict) -> PowerRevision:
@@ -65,6 +73,19 @@ class TrajectoryStore:
     def trajectory(self, trace_id: str) -> Trajectory:
         return self.current(trace_id).trajectory()
 
+    def revision(self, trace_id: str, revision: str) -> PowerRevision:
+        """Return any registered revision (current or superseded)."""
+        try:
+            return self._history[(trace_id, revision)]
+        except KeyError as exc:
+            raise RevisionError(
+                f"unknown revision {revision!r} for trace {trace_id!r}"
+            ) from exc
+
+    def trajectory_at(self, trace_id: str, revision: str) -> Trajectory:
+        """The trajectory exactly as it was at ``revision`` (auditable)."""
+        return self.revision(trace_id, revision).trajectory()
+
     # -- revising --------------------------------------------------------- #
     def revise(self, trace_id: str, revision: str,
                replace: Iterable[Segment], *, expected_revision: str | None = None) -> PowerRevision:
@@ -80,7 +101,7 @@ class TrajectoryStore:
                 f"trace {trace_id!r} is at revision {cur.revision!r}, "
                 f"expected {expected_revision!r}"
             )
-        if revision == cur.revision:
+        if (trace_id, revision) in self._history:
             raise RevisionError(f"revision {revision!r} already exists")
 
         by_id = {s.segment_id: s for s in cur.segments}
@@ -107,6 +128,7 @@ class TrajectoryStore:
         new_rev = PowerRevision(trace_id, revision, tuple(ordered))
         # ``validate_segments`` returns a new sorted tuple; only assign on success.
         self._revs[trace_id] = new_rev
+        self._history[(trace_id, revision)] = new_rev
         return new_rev
 
     def revise_json(self, trace_id: str, obj: dict, *,

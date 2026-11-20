@@ -1,0 +1,26 @@
+{
+  "experiments": [
+    {
+      "experiment_id": "EXP1",
+      "sign_groups": ["g1", "g2"],
+      "observed_faces": {"g1": "+", "g2": "+"},
+      "pairs": [
+        {"pair_id": "p1", "left": "A", "right": "B",
+         "group": "g1", "wiring": "same", "observed_treated": "left"},
+        {"pair_id": "p2", "left": "C", "right": "D",
+         "group": "g2", "wiring": "same", "observed_treated": "left"}
+      ]
+    },
+    {
+      "experiment_id": "EXP2",
+      "sign_groups": ["g"],
+      "observed_faces": {"g": "+"},
+      "pairs": [
+        {"pair_id": "p1", "left": "A", "right": "B",
+         "group": "g", "wiring": "same", "observed_treated": "left"},
+        {"pair_id": "p2", "left": "C", "right": "D",
+         "group": "g", "wiring": "same", "observed_treated": "left"}
+      ]
+    }
+  ]
+}

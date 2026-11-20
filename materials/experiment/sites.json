@@ -1,0 +1,21 @@
+{
+  "sites": [
+    {"site_id": "A", "site_version": "v1", "trace_id": "A",
+     "baselines": [[0, 1]], "observation": [1, 2]},
+    {"site_id": "B", "site_version": "v1", "trace_id": "B",
+     "baselines": [[0, 1]], "observation": [1, 2]},
+    {"site_id": "C", "site_version": "v1", "trace_id": "C",
+     "baselines": [[0, 1]], "observation": [1, 2]},
+    {"site_id": "D", "site_version": "v1", "trace_id": "D",
+     "baselines": [[0, 1]], "observation": [1, 2]},
+    {"site_id": "E", "site_version": "v1", "trace_id": "E",
+     "baselines": [[0, 1], [1, 3]], "observation": [3, 4]},
+    {"site_id": "F0", "site_version": "v1", "trace_id": "F0",
+     "baselines": [[0, 1]], "observation": [1, 2]},
+    {"site_id": "F1", "site_version": "v1", "trace_id": "F1",
+     "baselines": [[0, 1]], "observation": [1, 2]},
+    {"site_id": "H", "site_version": "v1",
+     "old_trace_id": "HOLD", "new_trace_id": "HNEW", "handover": [0, 2],
+     "baselines": [[0, 1]], "observation": [1, 2]}
+  ]
+}
